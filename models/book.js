@@ -1,0 +1,31 @@
+"use strict";
+const { Model } = require("sequelize");
+module.exports = (sequelize, DataTypes) => {
+  class Book extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // relasi belongsToMany melalui tabel pivot (authorbooks)
+      Book.belongsToMany(models.Author, {
+        as: "authors",
+        through: {
+          model: "AuthorBook",
+          as: "info",
+        },
+      });
+    }
+  }
+  Book.init(
+    {
+      name: DataTypes.STRING,
+    },
+    {
+      sequelize,
+      modelName: "Book",
+    }
+  );
+  return Book;
+};
